@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicImagesSplatRouteImport } from './routes/api/public/images.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
+  id: '/collections/$slug',
+  path: '/collections/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
@@ -32,30 +44,54 @@ const ApiPublicImagesSplatRoute = ApiPublicImagesSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/images/$': typeof ApiPublicImagesSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/images/$': typeof ApiPublicImagesSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
+  '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/images/$': typeof ApiPublicImagesSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/paystack-webhook' | '/api/public/images/$'
+  fullPaths:
+    | '/'
+    | '/collections/$slug'
+    | '/product/$slug'
+    | '/api/public/paystack-webhook'
+    | '/api/public/images/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/paystack-webhook' | '/api/public/images/$'
-  id: '__root__' | '/' | '/api/public/paystack-webhook' | '/api/public/images/$'
+  to:
+    | '/'
+    | '/collections/$slug'
+    | '/product/$slug'
+    | '/api/public/paystack-webhook'
+    | '/api/public/images/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/collections/$slug'
+    | '/product/$slug'
+    | '/api/public/paystack-webhook'
+    | '/api/public/images/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CollectionsSlugRoute: typeof CollectionsSlugRoute
+  ProductSlugRoute: typeof ProductSlugRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
   ApiPublicImagesSplatRoute: typeof ApiPublicImagesSplatRoute
 }
@@ -67,6 +103,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections/$slug': {
+      id: '/collections/$slug'
+      path: '/collections/$slug'
+      fullPath: '/collections/$slug'
+      preLoaderRoute: typeof CollectionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
@@ -88,6 +138,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CollectionsSlugRoute: CollectionsSlugRoute,
+  ProductSlugRoute: ProductSlugRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
   ApiPublicImagesSplatRoute: ApiPublicImagesSplatRoute,
 }

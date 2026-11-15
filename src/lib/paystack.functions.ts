@@ -111,7 +111,7 @@ export const verifyPaystackPayment = createServerFn({ method: "POST" })
       reference: order.reference,
       customerName: order.customer_name,
       total: order.total,
-      items: order.items as VerifiedOrder["items"],
+      items: (order.items ?? []) as NonNullable<VerifiedOrder["items"]>,
     };
     if (order.payment_status === "paid") return { ...summary, paymentStatus: "paid" };
 
