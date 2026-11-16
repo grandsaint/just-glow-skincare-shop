@@ -1,0 +1,4 @@
+- [ ] Complete customer-facing home, shop, collection index, cart, checkout, order result, about, and contact pages.
+- [ ] Add shared navigation/footer and functional cart-to-order flows.
+- [ ] Add admin sign-in and role-protected product, category, order, and settings management.
+- [ ] Validate the customer flow, tests, preview logs, and commit changes.

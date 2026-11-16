@@ -9,17 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicImagesSplatRouteImport } from './routes/api/public/images.$'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
   id: '/collections/$slug',
   path: '/collections/$slug',
@@ -43,14 +37,12 @@ const ApiPublicImagesSplatRoute = ApiPublicImagesSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/images/$': typeof ApiPublicImagesSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -58,7 +50,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -67,21 +58,18 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/collections/$slug'
     | '/product/$slug'
     | '/api/public/paystack-webhook'
     | '/api/public/images/$'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/collections/$slug'
     | '/product/$slug'
     | '/api/public/paystack-webhook'
     | '/api/public/images/$'
   id:
     | '__root__'
-    | '/'
     | '/collections/$slug'
     | '/product/$slug'
     | '/api/public/paystack-webhook'
@@ -89,7 +77,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
@@ -98,13 +85,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/collections/$slug': {
       id: '/collections/$slug'
       path: '/collections/$slug'
@@ -137,7 +117,6 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
