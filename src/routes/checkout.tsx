@@ -24,7 +24,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function CheckoutPage() {
-  const { items, subtotal } = useCart();
+  const { items, subtotal, hydrated } = useCart();
   const { data: settings } = useQuery(settingsQuery);
   const shop = settings ?? DEFAULT_SETTINGS;
   const startCheckout = useServerFn(startPaystackCheckout);
@@ -60,6 +60,7 @@ function CheckoutPage() {
       setBusy(false);
     }
   };
+  if (!hydrated) return <main className="container-shop min-h-[52vh] py-16 text-center text-sm text-muted-foreground">Getting your order ready…</main>;
   if (!items.length) return <main className="container-shop min-h-[52vh] py-16 text-center"><h1 className="text-3xl font-semibold">Your bag is empty</h1><p className="mt-3 text-muted-foreground">Add a favourite before checking out.</p><Button asChild variant="brand" className="mt-6"><Link to="/shop">Explore the shop</Link></Button></main>;
   const fields = [
     { id: "name", label: "Full name", autoComplete: "name" },

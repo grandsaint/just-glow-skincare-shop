@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { ArrowUpRight, Instagram, Menu, ShoppingBag, X } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Logo } from "./Logo";
 import { SocialLinks } from "./SocialLinks";
 import { useCart } from "@/lib/cart";
 import { useQuery } from "@tanstack/react-query";
 import { settingsQuery } from "@/lib/queries";
 import { DEFAULT_SETTINGS } from "@/lib/types";
+import { subscribeNewsletter } from "@/lib/catalog.functions";
 
 const navigation = [
   { label: "Home", to: "/" as const },
@@ -22,7 +26,22 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
   const { count } = useCart();
   const { data: settings } = useQuery(settingsQuery);
   const shop = settings ?? DEFAULT_SETTINGS;
+  const subscribe = useServerFn(subscribeNewsletter);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterBusy, setNewsletterBusy] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  const handleNewsletter = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNewsletterBusy(true);
+    try {
+      await subscribe({ data: { email: newsletterEmail } });
+      toast.success("You’re on the list. Look out for a little glow in your inbox.");
+      setNewsletterEmail("");
+    } catch {
+      toast.error("We couldn’t add you just now. Please try again.");
+    } finally { setNewsletterBusy(false); }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,6 +79,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
           <div><p className="text-sm font-semibold">Explore</p><div className="mt-4 grid gap-3 text-sm text-background/70"><Link to="/shop" className="hover:text-background">Shop all</Link><Link to="/collections" className="hover:text-background">Collections</Link><Link to="/about" className="hover:text-background">Our story</Link><Link to="/contact" className="hover:text-background">Contact</Link></div></div>
           <div><p className="text-sm font-semibold">Say hello</p><div className="mt-4 grid gap-3 text-sm text-background/70"><a href={`mailto:${shop.business_email}`} className="break-all hover:text-background">{shop.business_email}</a><a href={`tel:${shop.phone.replace(/\s/g, "")}`} className="hover:text-background">{shop.phone}</a><a href={`https://wa.me/${shop.whatsapp_number}`} target="_blank" rel="noreferrer" className="hover:text-background">WhatsApp orders</a><Link to="/admin" className="mt-3 text-xs text-background/50 hover:text-background">Shop management</Link></div></div>
         </div>
+        <div className="container-shop border-t border-background/15 py-8 md:flex md:items-center md:justify-between md:gap-8"><div><p className="font-semibold">A little glow in your inbox</p><p className="mt-1 text-sm text-background/65">Join our notes for new arrivals and small moments of care.</p></div><form onSubmit={(event) => void handleNewsletter(event)} className="mt-4 flex max-w-md gap-2 md:mt-0 md:w-full"><Input type="email" required maxLength={255} aria-label="Email for newsletter" placeholder="Your email address" value={newsletterEmail} onChange={(event) => setNewsletterEmail(event.target.value)} className="border-background/30 bg-background/10 text-background placeholder:text-background/55" /><Button type="submit" variant="soft" disabled={newsletterBusy}>{newsletterBusy ? "Joining…" : "Join us"}</Button></form></div>
         <div className="border-t border-background/15"><div className="container-shop flex flex-col gap-2 py-4 text-xs text-background/55 sm:flex-row sm:items-center sm:justify-between"><span>© {new Date().getFullYear()} JUST GLOW. All rights reserved.</span><span>Made for your everyday glow.</span></div></div>
       </footer>
     </div>

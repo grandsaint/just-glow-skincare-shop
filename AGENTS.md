@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project architecture
+
+- Keep customer pages as top-level TanStack file routes inside the shared `SiteLayout`, and put privileged shop management behind authenticated, server-validated functions so public shopping remains accessible without exposing admin actions.

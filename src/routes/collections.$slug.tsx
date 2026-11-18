@@ -27,7 +27,8 @@ export const Route = createFileRoute("/collections/$slug")({
 function CollectionPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(catalogQuery);
-  const cat = data.categories.find((c) => c.slug === slug)!;
+  const cat = data.categories.find((c) => c.slug === slug);
+  if (!cat) return <main className="container-shop py-24 text-center">Collection not found. <Link to="/collections" className="text-primary underline">Browse collections</Link></main>;
   const products = data.products.filter((p) => p.category_id === cat.id);
   return (
     <main className="container-shop py-12 md:py-20">

@@ -33,7 +33,8 @@ export const Route = createFileRoute("/product/$slug")({
 function ProductPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(catalogQuery);
-  const product = data.products.find((p) => p.slug === slug)!;
+  const product = data.products.find((p) => p.slug === slug);
+  if (!product) return <main className="container-shop py-24 text-center"><h1 className="text-xl font-semibold">Product not found</h1><Link to="/shop" className="mt-3 inline-block text-primary underline">Browse the shop</Link></main>;
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   return (
