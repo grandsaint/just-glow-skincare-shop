@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
 
 const productInput = z.object({
   id: z.string().uuid().optional(),
@@ -33,7 +35,12 @@ const settingsInput = z.object({
   tiktok_url: z.string().url().max(500),
 });
 
-async function ensureAdmin(context: { supabase: { rpc: (name: "has_role", args: { _user_id: string; _role: "admin" }) => Promise<{ data: boolean | null; error: unknown }> }; userId: string }) {
+type AuthContext = {
+  supabase: SupabaseClient<Database>;
+  userId: string;
+};
+
+async function ensureAdmin(context: AuthContext) {
   const { data, error } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   if (error || !data) throw new Error("Admin access required.");
 }

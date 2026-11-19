@@ -31,9 +31,9 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
   const validate = () => {
-    const next: Record<string, string> = {};
+    const next: Partial<Record<keyof typeof form, string>> = {};
     if (form.name.trim().length < 2) next.name = "Enter your full name.";
     if (form.phone.trim().length < 7) next.phone = "Enter a valid phone number.";
     if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) next.email = "Enter a valid email address.";

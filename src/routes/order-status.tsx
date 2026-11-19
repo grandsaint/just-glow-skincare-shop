@@ -9,7 +9,7 @@ import { verifyPaystackPayment } from "@/lib/paystack.functions";
 import { useCart } from "@/lib/cart";
 
 export const Route = createFileRoute("/order-status")({
-  validateSearch: (search: Record<string, unknown>) => ({ reference: typeof search.reference === "string" ? search.reference : undefined }),
+  validateSearch: (search: Record<string, unknown>) => ({ reference: typeof search["reference"] === "string" ? search["reference"] : undefined }),
   head: () => ({ meta: [
     { title: "Order Status | JUST GLOW" }, { name: "description", content: "Check the status of your JUST GLOW order." },
     { property: "og:title", content: "Order Status | JUST GLOW" }, { property: "og:description", content: "Check the status of your JUST GLOW order." },

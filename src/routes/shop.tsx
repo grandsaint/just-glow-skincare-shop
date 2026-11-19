@@ -30,7 +30,7 @@ function ShopPage() {
       const matchesTerm = `${product.name} ${product.short_description}`.toLowerCase().includes(term.toLowerCase());
       return matchesTerm && (category === "all" || product.category_id === category);
     });
-    return matching.toSorted((a, b) => sort === "price-low" ? a.price - b.price : sort === "price-high" ? b.price - a.price : sort === "name" ? a.name.localeCompare(b.name) : Number(b.featured) - Number(a.featured));
+    return [...matching].sort((a, b) => sort === "price-low" ? a.price - b.price : sort === "price-high" ? b.price - a.price : sort === "name" ? a.name.localeCompare(b.name) : Number(b.featured) - Number(a.featured));
   }, [data.products, term, category, sort]);
   return <main className="container-shop py-12 md:py-16">
     <div className="border-b border-border pb-10"><SectionHeading align="left" eyebrow="THE JUST GLOW EDIT" script="Find your favourites" title="Shop all" intro="Everyday skincare and body care, gathered in one lovely place." /></div>
