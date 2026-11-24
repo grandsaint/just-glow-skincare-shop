@@ -19,9 +19,11 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
 });
 
 export const getSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { createPublicSupabase } = await import("./public-supabase.server");
-  const sb = createPublicSupabase();
-  const { data } = await sb.from("site_settings").select("*").eq("id", 1).maybeSingle();
+  // Settings are read with the server client so the table itself stays private.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("site_settings")
+    .select("whatsapp_number, business_email, phone, instagram_url, facebook_url, tiktok_url").eq("id", 1).maybeSingle();
   return (data ?? DEFAULT_SETTINGS) as SiteSettings;
 });
 
